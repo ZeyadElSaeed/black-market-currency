@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: black_market
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - black_market_network
+
+  black-market:
+    image: black_market:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      EMAIL_HOST: smtp.gmail.com
+      EMAIL_PORT: 587
+      EMAIL_USERNAME: # insert email
+      EMAIL_PASSWORD: # insert pass
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: black_market
+      POSTGRES_USERNAME: username
+      POSTGRES_PASSWORD: password
+    networks:
+      - black_market_network
+
+volumes:
+  postgres:
+networks:
+  black_market_network:
